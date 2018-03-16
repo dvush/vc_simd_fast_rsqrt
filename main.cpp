@@ -1,4 +1,5 @@
 #include <Vc/Vc>
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <random>
@@ -31,6 +32,8 @@ void checkErrors() {
   std::vector<double> data;
   genearateData(data, N);
 
+  std::vector<double> error_accum;
+
   for (int i = 0; i < N; i += double_v::size()) {
     double_v x;
     x.load(&data.data()[i], Vc::Unaligned);
@@ -40,10 +43,17 @@ void checkErrors() {
 
     double_v error = Vc::abs(r - r_full);
     max_error = std::max(max_error, error.max());
-    cum_error = error.sum();
+    error_accum.push_back(error.sum());
   }
+
+  std::sort(error_accum.begin(), error_accum.end());
+  cum_error = std::accumulate(error_accum.begin(), error_accum.end(),
+                              0.0); // Could be replaced by better summation
+
   std::cout << "Trials: " << N << std::endl;
   std::cout << "Cumulative error : " << cum_error << std::endl;
+  std::cout << "Average error    : " << cum_error / error_accum.size()
+            << std::endl;
   std::cout << "Maximum error    : " << max_error << std::endl;
 }
 
