@@ -65,15 +65,15 @@ void benchmark_unroll() {
     double_v r1 = fast_rsqrt(x1);
 
     double_v x2;
-    x2.load(&data.data()[i], Vc::Unaligned);
+    x2.load(&data.data()[i + double_v::size()], Vc::Unaligned);
     double_v r2 = fast_rsqrt(x2);
 
     double_v x3;
-    x3.load(&data.data()[i], Vc::Unaligned);
+    x3.load(&data.data()[i + double_v::size() * 2], Vc::Unaligned);
     double_v r3 = fast_rsqrt(x3);
 
     double_v x4;
-    x4.load(&data.data()[i], Vc::Unaligned);
+    x4.load(&data.data()[i + double_v::size() * 3], Vc::Unaligned);
     double_v r4 = fast_rsqrt(x4);
 
     sum += r1.sum() + r2.sum() + r3.sum() + r4.sum();
@@ -95,15 +95,15 @@ void benchmark_unroll() {
     double_v r1 = 1.0 / Vc::sqrt(x1);
 
     double_v x2;
-    x2.load(&data.data()[i], Vc::Unaligned);
+    x2.load(&data.data()[i + double_v::size() * 1], Vc::Unaligned);
     double_v r2 = 1.0 / Vc::sqrt(x2);
 
     double_v x3;
-    x3.load(&data.data()[i], Vc::Unaligned);
+    x3.load(&data.data()[i + double_v::size() * 2], Vc::Unaligned);
     double_v r3 = 1.0 / Vc::sqrt(x3);
 
     double_v x4;
-    x4.load(&data.data()[i], Vc::Unaligned);
+    x4.load(&data.data()[i + double_v::size() * 3], Vc::Unaligned);
     double_v r4 = 1.0 / Vc::sqrt(x4);
 
     sum += r1.sum() + r2.sum() + r3.sum() + r4.sum();
