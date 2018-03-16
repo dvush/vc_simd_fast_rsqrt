@@ -16,7 +16,7 @@ double_v fast_rsqrt(double_v x) {
 
 void genearateData(std::vector<double> &data, int N) {
   std::default_random_engine eng;
-  std::uniform_real_distribution<double> d(0.0, 100.0);
+  std::uniform_real_distribution<double> d(0.0, 1000.0);
   data.clear();
   for (int i = 0; i < N; ++i) {
     data.push_back(d(eng));
@@ -41,7 +41,7 @@ void checkErrors() {
     double_v r = fast_rsqrt(x);
     double_v r_full = 1.0 / Vc::sqrt(x);
 
-    double_v error = Vc::abs(r - r_full);
+    double_v error = Vc::abs(r - r_full) / r_full;
     max_error = std::max(max_error, error.max());
     error_accum.push_back(error.sum());
   }
@@ -51,10 +51,10 @@ void checkErrors() {
                               0.0); // Could be replaced by better summation
 
   std::cout << "Trials: " << N << std::endl;
-  std::cout << "Cumulative error : " << cum_error << std::endl;
-  std::cout << "Average error    : " << cum_error / error_accum.size()
+  std::cout << "Cumulative error(rel) : " << cum_error << std::endl;
+  std::cout << "Average error(rel)    : " << cum_error / error_accum.size()
             << std::endl;
-  std::cout << "Maximum error    : " << max_error << std::endl;
+  std::cout << "Maximum error(rel)    : " << max_error << std::endl;
 }
 
 void benchmark_unroll() {
